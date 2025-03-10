@@ -1,3 +1,6 @@
 export default function sum(a, b) {
-  return a+b
-}
+    if (typeof a !== 'number' || typeof b !== 'number') {
+      throw new TypeError('Оба аргумента должны быть числами');
+    }
+    return a + b;
+  }
