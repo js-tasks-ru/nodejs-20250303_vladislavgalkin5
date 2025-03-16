@@ -1,52 +1,66 @@
-import { Injectable, HttpException, HttpStatus } from "@nestjs/common";
-import { Task, TaskStatus } from "./task.model";
-import { IsNotEmpty } from "@nestjs/class-validator"
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { TaskDto } from "./task.model";
 
 @Injectable()
 export class TasksService {
-  private tasks: Task[] = [];
+  private tasks: TaskDto[] = [];
 
-  getAllTasks(): Task[] {
+  getAllTasks(): TaskDto[] {
     return this.tasks
   }
 
-  getTaskById(id: string): Task {
+  getTaskById(id: string): TaskDto {
 
     const task = this.tasks.find(task => task.id == id)
+
+    if(!task) {
+      throw new NotFoundException('Task is not found')
+    }
 
     return task
   
   }
 
-  createTask(task: Task): Task {
+  createTask(TaskDto: TaskDto): TaskDto {
 
       this.tasks.push({
-
         id: (this.tasks.length + 1).toString()
-        , ...task
+        , ...TaskDto
+      });
 
-      }) 
-
-    return this.tasks.at(-1)
+    return this.tasks.at(-1);
     
   }
 
-  updateTask(id: string, update: Task): Task[] {
+  updateTask(id: string, TaskDto: TaskDto): TaskDto {
 
-    const task = this.tasks.indexOf(this.tasks.find(task => task.id == id));
+    const task = this.tasks.find(value => value.id = id)
 
-    this.tasks.splice(task, 1, update)
+    const updatedTask = {
+      id: task.id,
+      ...TaskDto
+    }
 
-    return this.tasks
+    if(!task) {
+      throw new NotFoundException('Task is not found')
+    };
+
+    this.tasks.splice(this.tasks.indexOf(task), 1, updatedTask);
+
+    return updatedTask;
   }
 
-  deleteTask(id: string): Task[] {
+  deleteTask(id: string): TaskDto {
 
-    const task = this.tasks.find(task => task.id == id)
+    const task = this.tasks.find(task => task.id == id);
 
-    this.tasks.splice(this.tasks.indexOf(task), 1)
+    if(!task) {
+      throw new NotFoundException('Task is not found')
+    };
 
-    return this.tasks
+    this.tasks.splice(this.tasks.indexOf(task), 1);
+
+    return task;
 
   }
 } 
