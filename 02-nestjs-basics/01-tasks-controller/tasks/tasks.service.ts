@@ -12,7 +12,7 @@ export class TasksService {
 
   getTaskById(id: string): Task {
 
-    let task = this.tasks.find(task => task.id == id)
+    const task = this.tasks.find(task => task.id == id)
 
     return task
   
@@ -31,11 +31,18 @@ export class TasksService {
     
   }
 
-  // updateTask(id: string, update: Task): Task {}
+  updateTask(id: string, update: Task): Task[] {
+
+    const task = this.tasks.indexOf(this.tasks.find(task => task.id == id));
+
+    this.tasks.splice(task, 1, update)
+
+    return this.tasks
+  }
 
   deleteTask(id: string): Task[] {
 
-    let task = this.tasks.find(task => task.id == id)
+    const task = this.tasks.find(task => task.id == id)
 
     this.tasks.splice(this.tasks.indexOf(task), 1)
 

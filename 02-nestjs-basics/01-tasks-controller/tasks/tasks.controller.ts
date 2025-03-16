@@ -29,10 +29,10 @@ export class TasksController {
     return this.tasksService.createTask(task);
   }
 
-  // @Patch(":id")
-  // updateTask(@Param("id") id: string, @Body() task: Task) {
-  //   this.tasksService.updateTask()
-  // }
+  @Patch(":id")
+  updateTask(@Param("id") id: string, @Body() task: Task) {
+    return this.tasksService.updateTask(id, task)
+  }
 
   @Delete(":id")
   deleteTask(@Param("id") id: string) {
