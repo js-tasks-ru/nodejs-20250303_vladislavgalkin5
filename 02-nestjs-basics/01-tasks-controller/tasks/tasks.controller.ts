@@ -15,17 +15,27 @@ export class TasksController {
   constructor(private readonly tasksService: TasksService) {}
 
   @Get()
-  getAllTasks() {}
+  getAllTasks() {
+    return this.tasksService.getAllTasks();
+  }
 
-  @Get(":id")
-  getTaskById(@Param("id") id: string) {}
+  // @Get(":id")
+  // getTaskById(@Param("id") id: string) {
+  //   this.tasksService.getTaskById()
+  // }
 
   @Post()
-  createTask(@Body() task: Task) {}
+  createTask(@Body() task: Task) {
+    return this.tasksService.createTask(task);
+  }
 
-  @Patch(":id")
-  updateTask(@Param("id") id: string, @Body() task: Task) {}
+  // @Patch(":id")
+  // updateTask(@Param("id") id: string, @Body() task: Task) {
+  //   this.tasksService.updateTask()
+  // }
 
-  @Delete(":id")
-  deleteTask(@Param("id") id: string) {}
+  // @Delete(":id")
+  // deleteTask(@Param("id") id: string) {
+  //   return this.tasksService.deleteTask(id)
+  // }
 }
