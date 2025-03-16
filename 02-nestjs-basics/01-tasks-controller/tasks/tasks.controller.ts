@@ -19,10 +19,10 @@ export class TasksController {
     return this.tasksService.getAllTasks();
   }
 
-  // @Get(":id")
-  // getTaskById(@Param("id") id: string) {
-  //   this.tasksService.getTaskById()
-  // }
+  @Get(":id")
+  getTaskById(@Param("id") id: string) {
+    return this.tasksService.getTaskById(id)
+  }
 
   @Post()
   createTask(@Body() task: Task) {

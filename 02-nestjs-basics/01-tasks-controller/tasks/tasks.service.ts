@@ -10,13 +10,21 @@ export class TasksService {
     return this.tasks
   }
 
-  // getTaskById(id: string): Task {}
+  getTaskById(id: string): Task {
+
+    let task = this.tasks.find(task => task.id == id)
+
+    return task
+  
+  }
 
   createTask(task: Task): Task {
 
       this.tasks.push({
+
         id: (this.tasks.length + 1).toString()
         , ...task
+
       }) 
 
     return this.tasks.at(-1)
@@ -26,10 +34,12 @@ export class TasksService {
   // updateTask(id: string, update: Task): Task {}
 
   deleteTask(id: string): Task[] {
+
     let task = this.tasks.find(task => task.id == id)
 
     this.tasks.splice(this.tasks.indexOf(task), 1)
 
     return this.tasks
+
   }
 }
