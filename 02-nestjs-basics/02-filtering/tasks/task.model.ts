@@ -4,9 +4,11 @@ export enum TaskStatus {
   COMPLETED = "completed",
 }
 
-export interface Task {
+export interface TaskDto {
+
   id?: string;
   title: string;
   description: string;
   status: TaskStatus;
+
 }

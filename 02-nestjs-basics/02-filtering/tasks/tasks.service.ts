@@ -1,9 +1,9 @@
-import { Injectable } from "@nestjs/common";
-import { Task, TaskStatus } from "./task.model";
+import { BadRequestException, Injectable} from "@nestjs/common";
+import { TaskDto, TaskStatus } from "./task.model";
 
 @Injectable()
 export class TasksService {
-  private tasks: Task[] = [
+  private tasks: TaskDto[] = [
     {
       id: "1",
       title: "Task 1",
@@ -33,12 +33,40 @@ export class TasksService {
       title: "Task 5",
       description: "Fifth task",
       status: TaskStatus.IN_PROGRESS,
-    },
+    }
   ];
 
   getFilteredTasks(
     status?: TaskStatus,
     page?: number,
     limit?: number,
-  ): Task[] {}
+    sortBy?: string
+  ): TaskDto[] {
+
+    let filteredTasks = this.tasks;
+
+
+    if (status){
+      filteredTasks = this.tasks.filter(task => task.status === status); 
+    };
+
+    if (sortBy){
+      filteredTasks.sort((a,b) => a[sortBy] > b[sortBy] ? 1 : -1);
+    };
+
+    if (page && limit){
+    
+      if (page <= 0 && limit <= 0){
+        throw new BadRequestException('The "page" and/or "limit" must be positive number')
+      }
+
+      const startIndex = (page - 1) * limit
+      const endIndex = startIndex + limit
+
+      return filteredTasks.slice(startIndex, endIndex);
+    }
+
+
+    return filteredTasks;
+  }
 }
