@@ -18,7 +18,7 @@ export class TaskDto {
   @IsString()
   description: string;
 
-  @IsEnum(["pending", "in_progress", "completed"], {
+  @IsEnum(Object.values(TaskStatus), {
     message: `Status should be one of the: ${Object.values(TaskStatus)}`
   })
   status: TaskStatus;
