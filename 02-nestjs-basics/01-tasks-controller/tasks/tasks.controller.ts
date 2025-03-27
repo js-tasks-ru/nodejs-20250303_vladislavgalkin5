@@ -23,7 +23,7 @@ export class TasksController {
 
   @Get(":id")
   getTaskById(
-    @Param("id", ParseIntPipe) id: string) {
+    @Param("id") id: string) {
     return this.tasksService.getTaskById(id)
   }
 
