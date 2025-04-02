@@ -8,9 +8,9 @@ export class RolesGuard implements CanActivate {
     const ctx = context.switchToHttp();
     const req = ctx.getRequest();
 
+    // Валидация через JWT добавлена отдельна, как часть опционального задания
     if (req.headers.authorization) {
-      const role = jwtDecode(req.headers.authorization)['x-role']
-      console.log(role)
+      return jwtDecode(req.headers.authorization)['x-role'] === 'admin' ? true : false
     }
     
     if (req.headers['x-role'] === 'admin' ) {
