@@ -4,8 +4,7 @@ import { tap } from "rxjs";
 export class ApiVersionInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler) {
     const start = Date.now()
-    const res = context.switchToHttp().getResponse();
-  
+    
     return next.handle().pipe(
       tap((data) => {
         data.executionTime = `${Date.now() - start + 'ms'}`;
