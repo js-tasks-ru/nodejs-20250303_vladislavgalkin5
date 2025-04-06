@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
 import { CreateTaskDto } from "./dto/create-task.dto";
 import { UpdateTaskDto } from "./dto/update-task.dto";
 import { InjectRepository } from "@nestjs/typeorm";
@@ -20,8 +20,22 @@ export class TasksService {
     return this.findOne(task.id);
   }
 
-  async findAll() {
-    return this.taskRepository.find()
+  async findAll(page?: number, limit?: number) {
+    const tasks = await this.taskRepository.find()
+
+    if (page && limit){
+      
+      if (page <= 0 || limit <= 0 ){
+        throw new BadRequestException('The "page" and/or "limit" must be positive number')
+      }
+
+      const startIndex = (page - 1) * limit
+      const endIndex = startIndex + limit
+
+      return tasks.slice(startIndex, endIndex);
+    }
+
+    return tasks;
   }
 
   async findOne(id: number) {
@@ -56,7 +70,7 @@ export class TasksService {
     return task;
   }
 
-  async remove(id: number): Promise<Task[]> {
+  async remove(id: number): Promise<{ message: string, tasks: Task[]}> {
     const task = await this.findOne(id)
 
     if (!task){
@@ -64,8 +78,11 @@ export class TasksService {
     }
 
     await this.taskRepository.delete(id);
+    const tasks = await this.findAll()
 
-    return this.findAll()
-
+    return {
+      message: 'Task deleted successfully',
+      tasks: tasks
+    };
   }
 }
