@@ -1,8 +1,8 @@
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config"
-import database from "config/database";
+import database from "./config/database";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { TasksModule } from "tasks/tasks.module";
+import { TasksModule } from "./tasks/tasks.module";
 
 @Module({
   imports: [

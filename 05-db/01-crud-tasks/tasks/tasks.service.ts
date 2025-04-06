@@ -25,9 +25,8 @@ export class TasksService {
   }
 
   async findOne(id: number) {
-
     const task = await this.taskRepository.findOne({ where: { id: id }})
-    
+
     if (!task){
       throw new NotFoundException('Задача не найдена')
     }
@@ -35,7 +34,38 @@ export class TasksService {
     return task;
   }
 
-  async update(id: number, updateTaskDto: UpdateTaskDto) {}
+  async update(id: number, updateTaskDto: UpdateTaskDto) {
+    const task = await this.findOne(id)
 
-  async remove(id: number): Promise<void> {}
+    if (!task){
+      throw new NotFoundException('Задача не найдена')
+    }
+    
+    if (task.title !== updateTaskDto.title){
+      task.title = updateTaskDto.title
+    }
+   
+    if (task.description !== updateTaskDto.description)
+      task.description = updateTaskDto.description
+
+    if (task.isCompleted !== updateTaskDto.isCompleted)
+      task.isCompleted = updateTaskDto.isCompleted
+
+    await this.taskRepository.save(task)
+
+    return task;
+  }
+
+  async remove(id: number): Promise<Task[]> {
+    const task = await this.findOne(id)
+
+    if (!task){
+      throw new NotFoundException('Задача не найдена')
+    }
+
+    await this.taskRepository.delete(id);
+
+    return this.findAll()
+
+  }
 }
