@@ -5,7 +5,8 @@ import * as path from 'path'
 export default registerAs('database', () => {
     return {
         type: 'sqlite',
-        database: path.join(__dirname, '..', 'db.sqlite'),
+        database: 'db.sqlite',
+        destination: path.join(__dirname, './db.sqlite'),
         autoLoadEntities: true
     } as TypeOrmModuleOptions
 })

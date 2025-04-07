@@ -10,7 +10,7 @@ export class RolesGuard implements CanActivate {
 
     // Валидация через JWT добавлена отдельна, как часть опционального задания
     if (req.headers.authorization) {
-      return jwtDecode(req.headers.authorization)['x-role'] === 'admin' ? true : false
+      return jwtDecode(req.headers.authorization)['x-role'] === 'admin'
     }
     
     if (req.headers['x-role'] === 'admin' ) {
