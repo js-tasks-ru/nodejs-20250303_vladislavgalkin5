@@ -7,8 +7,8 @@ import { AppController } from "./app.controller";
 @Module({
   imports: [
     TypeOrmModule.forRoot({
-      type: "sqlite",
-      database: ":memory:",
+      type: 'sqlite',
+      database: 'db.sqlite',
       synchronize: true,
       autoLoadEntities: true,
     }),

@@ -1,8 +1,9 @@
-import { Column, Entity, PrimaryColumn } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import * as bcrypt from 'bcrypt';
 
 @Entity()
 export class User {
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn()
   id: string;
 
   @Column()
@@ -10,4 +11,11 @@ export class User {
 
   @Column()
   avatar: string;
+
+  @Column()
+  password: string
+
+  validatePassword(password){
+    return bcrypt.compare(password, this.password)
+  }
 }
