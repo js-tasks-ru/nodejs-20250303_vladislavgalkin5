@@ -6,7 +6,8 @@ export default registerAs('database', () => {
     return {
         type: 'sqlite',
         database: path.join(__dirname, '..', 'db.sqlite'),
-        autoLoadEntities: true
+        autoLoadEntities: true,
+        synchronize: true
     } as TypeOrmModuleOptions
 })
 
