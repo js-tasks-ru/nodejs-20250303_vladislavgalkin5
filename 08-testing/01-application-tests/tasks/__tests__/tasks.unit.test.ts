@@ -2,17 +2,13 @@ import { Test, TestingModule } from "@nestjs/testing";
 import { TasksService } from "../tasks.service";
 import { getRepositoryToken } from "@nestjs/typeorm";
 import { Task } from "../entities/task.entity";
-import { Repository } from "typeorm";
-import { NotFoundException } from "@nestjs/common";
 import { CreateTaskDto } from "../dto/create-task.dto";
 import { UpdateTaskDto } from "../dto/update-task.dto";
 import { NestApplication } from "@nestjs/core";
-import { arrayContains } from "class-validator";
 
 describe("TasksService", () => {
   let app: NestApplication;
   let service: TasksService;
-  let repository: Repository<Task>;
 
   const newTasksDTO: CreateTaskDto[] = [
     {
@@ -49,7 +45,7 @@ describe("TasksService", () => {
   };
 
   beforeEach(async () => {
-    const module = await Test.createTestingModule({
+    const module: TestingModule = await Test.createTestingModule({
       providers: [TasksService, 
         {
           provide: getRepositoryToken(Task),
@@ -108,8 +104,7 @@ describe("TasksService", () => {
 
   describe("update", () => {
     it("should update a task when it exists", async () => {
-      const updatedTask = {
-        id: 1,
+      const updatedTask: UpdateTaskDto = {
         title: "New Task One",
         description: "New Task One Description",
         isCompleted: true,
@@ -122,7 +117,7 @@ describe("TasksService", () => {
       })
 
       expect(mockTasksRepository.findOneBy).toHaveBeenCalledWith({id: 1})
-      expect(result).toEqual(updatedTask);
+      expect(result).toMatchObject(updatedTask);
     });
 
     it("should throw NotFoundException when task to update does not exist", async () => {
