@@ -5,8 +5,8 @@ import { AppModule } from "../../app.module";
 import { getRepositoryToken } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { Task } from "../entities/task.entity";
-import { UpdateTaskDto } from "tasks/dto/update-task.dto";
-import { CreateTaskDto } from "tasks/dto/create-task.dto";
+import { UpdateTaskDto } from "../../tasks/dto/update-task.dto";
+import { CreateTaskDto } from "../../tasks/dto/create-task.dto";
 
 describe("TasksController (e2e)", () => {
   let app: INestApplication;
@@ -22,7 +22,7 @@ describe("TasksController (e2e)", () => {
     app = module.createNestApplication();
     app.init();
   });
-  
+
   afterAll(async () => {
     await app.close();
   });
