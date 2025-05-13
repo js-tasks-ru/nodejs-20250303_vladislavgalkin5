@@ -8,6 +8,6 @@ export class User {
   @Column()
   displayName: string;
 
-  @Column()
+  @Column( {default: ''} )
   avatar: string;
 }
