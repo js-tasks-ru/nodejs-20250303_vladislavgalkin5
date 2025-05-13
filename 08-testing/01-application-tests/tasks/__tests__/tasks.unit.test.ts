@@ -7,7 +7,6 @@ import { UpdateTaskDto } from "../dto/update-task.dto";
 import { NestApplication } from "@nestjs/core";
 
 describe("TasksService", () => {
-  let app: NestApplication;
   let service: TasksService;
 
   const newTasksDTO: CreateTaskDto[] = [
@@ -54,9 +53,6 @@ describe("TasksService", () => {
         },
       ],
     }).compile();
-
-    app = module.createNestApplication();
-    await app.init();
 
     service = module.get<TasksService>(TasksService);
   });
@@ -115,14 +111,16 @@ describe("TasksService", () => {
         description: "New Task One Description",
         isCompleted: true,
       };
-      mockTasksRepository.findOneBy.mockReturnValue(newTasksEntities[0]);
+      mockTasksRepository.findOneBy.mockResolvedValue(newTasksEntities[0]);
       mockTasksRepository.find.mockReturnValue(updatedTask);
+      mockTasksRepository.save.mockResolvedValue(newTasksEntities[0])
 
       const result = await service.update(newTasksEntities[0].id, {
         isCompleted: true,
       });
 
       expect(mockTasksRepository.findOneBy).toHaveBeenCalledWith({ id: 1 });
+      expect(mockTasksRepository.save).toHaveBeenCalledWith(newTasksEntities[0])
       expect(result).toMatchObject(updatedTask);
     });
 
@@ -138,16 +136,12 @@ describe("TasksService", () => {
 
   describe("remove", () => {
     it("should remove a task when it exists", async () => {
-      mockTasksRepository.findOneBy.mockResolvedValue(newTasksEntities[0].id);
-      mockTasksRepository.remove.mockResolvedValue(newTasksEntities[0].id);
-      const result = await service.remove(newTasksEntities[0].id);
+      mockTasksRepository.findOneBy.mockResolvedValue(newTasksEntities[0]);
+      mockTasksRepository.remove.mockReturnValue(null)
 
-      expect(mockTasksRepository.findOneBy).toHaveBeenCalledWith({
-        id: newTasksEntities[0].id,
-      });
-      expect(mockTasksRepository.remove).toHaveBeenCalledWith(
-        newTasksEntities[0].id,
-      );
+      const result = await service.remove(1)
+
+      expect(mockTasksRepository.remove).toHaveBeenCalledWith(newTasksEntities[0])
       expect(result).toBeUndefined();
     });
 
