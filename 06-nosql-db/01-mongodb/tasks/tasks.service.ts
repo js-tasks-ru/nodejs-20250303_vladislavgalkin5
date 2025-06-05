@@ -13,7 +13,7 @@ export class TasksService {
     
     const task = await this.TaskModel.create(createTaskDto)
     
-    return this.findOne(task.id);
+    return task;
   }
 
   async findAll():Promise<CreateTaskDto[]> {
@@ -31,22 +31,23 @@ export class TasksService {
   }
 
   async update(id: ObjectId, updateTaskDto: UpdateTaskDto) : Promise<UpdateTaskDto> {
-    
-    await this.findOne(id)
 
-    const updatedTask = await this.TaskModel.findOneAndUpdate(
-      {'_id': id}, 
-      updateTaskDto,
-      {new: true}).exec();
+    const updatedTask = await this.TaskModel.findByIdAndUpdate(id, updateTaskDto, { new : true }).exec();
 
-    return updatedTask;
+    if (!updatedTask){
+      throw new NotFoundException(`The task with is ${id} is not found`);
+    }
+
+    return updatedTask.toObject() as UpdateTaskDto;
   }
 
   async remove(id: ObjectId):Promise<{message: string}> {
-    
-    await this.findOne(id)
 
-    await this.TaskModel.findOneAndDelete({'_id': id}).exec();
+    const deletedTask = await this.TaskModel.findByIdAndDelete(id, { new: true })
+
+    if (!deletedTask) {
+      throw new NotFoundException(`The task with is ${id} is not found`);
+    }
 
     return {
       message: `The task ${id} is deleted.`

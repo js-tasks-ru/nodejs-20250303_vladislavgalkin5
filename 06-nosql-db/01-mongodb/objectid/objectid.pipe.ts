@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable, PipeTransform } from "@nestjs/common";
-import { isValidObjectId } from "mongoose";
+import { isValidObjectId, Types } from "mongoose";
 
 @Injectable()
 export class ObjectIDPipe implements PipeTransform {
@@ -9,6 +9,6 @@ export class ObjectIDPipe implements PipeTransform {
       throw new BadRequestException('not a valid object id');
     }
 
-    return value;
+    return new Types.ObjectId(value);
   }
 }
